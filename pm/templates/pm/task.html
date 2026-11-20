@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block content %}<a href="{% url 'board' p.pk %}">← {{ p.name }}</a>
+<div class="card card-body my-3"><h3>{{ t.title }}</h3><p>{{ t.description }}</p>
+<div class="d-flex gap-3 flex-wrap">
+<form method="post" class="d-flex gap-2">{% csrf_token %}<select name="status" class="form-select form-select-sm">{% for k, l in statuses %}<option value="{{ k }}" {% if t.status == k %}selected{% endif %}>{{ l }}</option>{% endfor %}</select><button class="btn btn-sm btn-dark">Move</button></form>
+<form method="post" class="d-flex gap-2">{% csrf_token %}<select name="assignee" class="form-select form-select-sm"><option value="">Unassigned</option>{% for m in members %}<option value="{{ m.pk }}" {% if t.assignee == m %}selected{% endif %}>{{ m.username }}</option>{% endfor %}</select><button class="btn btn-sm btn-dark">Assign</button></form></div></div>
+<h5>Comments</h5>{% for c in t.comments.all %}<div class="card card-body mb-2"><b>{{ c.author.username }}</b> <small class="text-muted">{{ c.created|timesince }} ago</small>{{ c.text }}</div>{% empty %}<p class="text-muted">No comments yet</p>{% endfor %}
+<form method="post" class="mt-2">{% csrf_token %}<textarea name="text" class="form-control mb-2" placeholder="Write a comment..." required></textarea><button class="btn btn-primary">Comment</button></form>{% endblock %}

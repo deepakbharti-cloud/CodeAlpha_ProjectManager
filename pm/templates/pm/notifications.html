@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% block content %}<h4>Notifications</h4><div class="list-group">
+{% for n in items %}<a href="{{ n.link }}" class="list-group-item list-group-item-action">{{ n.message }} <small class="text-muted">{{ n.created|timesince }} ago</small></a>{% empty %}<div class="list-group-item">No notifications</div>{% endfor %}</div>{% endblock %}

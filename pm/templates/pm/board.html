@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3"><div><h3>{{ p.name }}</h3><p class="text-muted">{{ p.description }}</p>
+<small>Members: {% for m in members %}{{ m.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</small></div>
+<form method="post" action="{% url 'add_member' p.pk %}" class="d-flex gap-2">{% csrf_token %}<input name="username" class="form-control form-control-sm" placeholder="Add member (username)"><button class="btn btn-sm btn-outline-dark">Add</button></form></div>
+<form method="post" action="{% url 'add_task' p.pk %}" class="card card-body mb-4"><div class="row g-2">{% csrf_token %}
+<div class="col-md-3"><input name="title" class="form-control" placeholder="Task title" required></div>
+<div class="col-md-3"><input name="description" class="form-control" placeholder="Description"></div>
+<div class="col-md-2"><select name="assignee" class="form-select"><option value="">Unassigned</option>{% for m in members %}<option value="{{ m.pk }}">{{ m.username }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><input type="date" name="due" class="form-control"></div><div class="col-md-2"><button class="btn btn-primary w-100">Add Task</button></div></div></form>
+<div class="row">{% for key, label, tasks in cols %}<div class="col-md-4"><div class="card"><div class="card-header fw-bold">{{ label }} ({{ tasks|length }})</div><div class="card-body">
+{% for t in tasks %}<a href="{% url 'task' t.pk %}" class="card card-body mb-2 text-decoration-none text-dark"><b>{{ t.title }}</b><small class="text-muted">{{ t.assignee.username|default:"Unassigned" }}{% if t.due %} · due {{ t.due }}{% endif %} · 💬 {{ t.comments.count }}</small></a>{% empty %}<small class="text-muted">Nothing here</small>{% endfor %}</div></div></div>{% endfor %}</div>{% endblock %}
